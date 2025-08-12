@@ -39,15 +39,15 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:userId", async (req, res) => {
-  const { userId } = req.params;
-
-  if (!userId) return res.status(400).send({ msg: "UserId is required" });
-
-  const result =
-    await sql`DELETE FROM transactions WHERE user_id = ${userId} RETURNING *`;
-  console.log(result);
-  return res.status(200).send({ msg: "User Deleted Successfully" });
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Use your DB logic to delete by transaction id
+    await sql`DELETE FROM transactions WHERE id = ${id}`;
+    return res.status(200).json({ msg: "Transaction deleted" });
+  } catch (error) {
+    return res.status(500).json({ msg: "Error deleting transaction" });
+  }
 });
 
 router.get("/", async (req, res) => {
